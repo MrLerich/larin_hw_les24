@@ -1,25 +1,24 @@
-from flask import Blueprint
+from flask import Blueprint, jsonify, request, Response
 from marshmallow import ValidationError
 
-app_bp = Blueprint('main', __name__)
+from builder import build_query
+from models import BatchRequestParams
 
-@app_bp.route("/perform_query", methods=['POST'])
-def perform_query():
+main_bp = Blueprint('main', __name__)
+
+@main_bp.route("/perform_query", methods=['POST'])
+def perform_query() -> Response:
     try:
         params = BatchRequestParams().load(request.json)
 
-    except ValidationError as e:
-        return e.message, 404
+    except ValidationError as error:
+        return Response(response=error.messages, status=400)
 
-    result = None
+    result = None #либо  обрабатываем данные из файла на первой итерации либо уже по "отфильтрованным данным"
+    #приходит запрос query и по каждому cmd делаю соотв запрос build_query
     for query in params['queries']:
-        result = build_query(cmd=query['cmd'], param=query['param'], data=result)
+        result = build_query(cmd=query['cmd'], param=query['value'], data=result)
 
     return jsonify(result)
 
 
-    # получить параметры query и file_name из request.args, при ошибке вернуть ошибку 400
-    # проверить, что файла file_name существует в папке DATA_DIR, при ошибке вернуть ошибку 400
-    # с помощью функционального программирования (функций filter, map), итераторов/генераторов сконструировать запрос
-    # вернуть пользователю сформированный результат
-    return app.response_class('', content_type="text/plain")
