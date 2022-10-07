@@ -1,3 +1,5 @@
+from typing import List, Optional, Any, Mapping, Union, Iterable
+
 from flask import Blueprint, jsonify, request, Response
 from marshmallow import ValidationError
 
@@ -7,7 +9,7 @@ from models import BatchRequestParams
 main_bp = Blueprint('main', __name__)
 
 @main_bp.route("/perform_query", methods=['POST'])
-def perform_query() -> Response:
+def perform_query(): #type: ignore
     try:
         params = BatchRequestParams().load(request.json)
 

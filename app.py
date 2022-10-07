@@ -7,7 +7,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 
 
-def create_application():
+def create_application() -> Flask:
     """Создает приложение и регистрирует blueprint"""
     app = Flask(__name__)
     app.register_blueprint(main_bp)
