@@ -1,0 +1,10 @@
+[Unit]
+Description=Flask app service description
+After=network.target
+
+[Service]
+WorkingDirectory=/home/vlarin/app
+ExecStart=/home/vlarin/app/venv/bin/python run.py
+
+[Install]
+WantedBy=multi-user.target
